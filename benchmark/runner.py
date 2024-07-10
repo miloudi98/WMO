@@ -123,8 +123,8 @@ class CgroupMonitor:
             workingset_pa = CgroupMonitor._workingset_page_age()
             for nid, pa_buckets in workingset_pa.items():
                 for time, anon, file in pa_buckets:
-                    self._add(f"memory.workinget.node.{nid}.{time}ms.anon", anon)
-                    self._add(f"memory.workinget.node.{nid}.{time}ms.file", file)
+                    self._add(f"memory.workingset.node.{nid}.{time}ms.anon", anon)
+                    self._add(f"memory.workingset.node.{nid}.{time}ms.file", file)
         else:
             raise ValueError(f"Unkown metric: {metric}")
 
@@ -166,6 +166,7 @@ def splash():
     cgmon.monitor(workload_process)
     cgmon.dump(argv.o)
 
+    log(f"Tearing down container '{argv.cgroup}'.")
     os.rmdir(argv.cgroup)
 
 
