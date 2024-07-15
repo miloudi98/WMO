@@ -66,10 +66,10 @@ We ran three experiments:
 Statistics from the experiments above can be found inside the `${WMO_PROJECT_ROOT}/benchmark/data/linux-kernel` folder.
 The results were as follows:
 
-![Figure_5](./memory_current.png)
+![Figure_5](./benchmark/data/linux-kernel/memory_current.png)
 
-![Figure_3](./runtime.png)
+![Figure_3](./benchmark/data/linux-kernel/runtime.png)
 
-![Figure_4](./peak_usage.png)
+![Figure_4](./benchmark/data/linux-kernel/peak_usage.png)
 
 ## Benchmark -- Redis benchmark

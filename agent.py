@@ -70,12 +70,32 @@ def init_zswap_config():
     if argv.disable_zswap:
         FS.write("/sys/module/zswap/parameters/enabled", "0")
 
+class MemoryDotHighPolicy:
+    def __init__(self):
+        assert argv.policy[0] == "memory.high"
+        self.cold_age_threshold_milliseconds = int(argv.policy[1])
+        self.reclaim_frequency_seconds = float(argv.policy[2])
+        self.throttle_duration_seconds = float(argv.policy[3])
+
+    def run(self):
+        while FS.cg_read("cgroup.procs") not in [None, ""]:
+            cold_mem = memory_colder_than(self.cold_age_threshold_milliseconds)
+            new_memory_dot_high = int(FS.cg_read("memory.current")) - cold_mem
+            log(
+                f"Reclaiming {cold_mem} ({cold_mem / (1 << 20)} MiB) from {argv.cgroup}. Setting memory.high to {new_memory_dot_high}"
+            )
+
+            FS.cg_write("memory.high", str(new_memory_dot_high))
+            time.sleep(self.throttle_duration_seconds)
+            FS.cg_write("memory.high", "max")
+            time.sleep(self.reclaim_frequency_seconds)
+
 
 class PeriodicPolicy:
     def __init__(self):
         assert argv.policy[0] == "periodic"
         self.cold_age_threshold_milliseconds = int(argv.policy[1])
-        self.reclaim_frequency_seconds = int(argv.policy[2])
+        self.reclaim_frequency_seconds = float(argv.policy[2])
 
     def run(self):
         while FS.cg_read("cgroup.procs") not in [None, ""]:
@@ -93,6 +113,8 @@ def splash():
 
     if argv.policy[0] == "periodic":
         PeriodicPolicy().run()
+    elif argv.policy[0] == "memory.high":
+        MemoryDotHighPolicy().run()
     else:
         raise ValueError(f"Unrecognized policy {argv.policy[0]}")
 
@@ -111,6 +133,10 @@ if __name__ == "__main__":
         * 'periodic'
           -- $1: cold_age_threshold_milliseconds
           -- $2: reclaim_frequency_seconds
+        * 'memory.high'
+          -- $1: cold_age_threshold_milliseconds
+          -- $2: reclaim_frequency_seconds
+          -- $3: throttle_duration_seconds
         """,
     )
 
