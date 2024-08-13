@@ -10,6 +10,24 @@ The benchmarks below are from [openbenchmarking.org](https://openbenchmarking.or
 For each benchmark, we will show the amount of memory savings we were able to get as well as a report describing the performance impact of our memory optimization policy.
 The performance impact report is provided by the [phoronix-test-suite](http://www.phoronix-test-suite.com/) CLI. We will show a few screenshots here in this document, but all reports can be found in the benchmarks/$BENCHMARK/ directory.
 
+### Reproducing the benchmark results
+
+Benchmarks are executed using the [monitoring.py](./runtime/monitoring.py) script which is a simple wrapper around the phoronix-test-suite CLI. As the name suggests, this script simply starts the benchmark and collects stats.
+Run the following command to reproduce the linux kernel compilation benchmark.
+```
+sudo ./runtime/monitoring.py 'phoronix-test-suite benchmark build-linux-kernel' \
+     --output=./stats.csv \
+     --probing_freq_seconds=1 \
+     --cgroup_refresh_interval='0,30000' \
+     --node_page_age_intervals='0,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000,13000,14000,15000' \
+     --node_refresh_interval='0,30000' \
+     --configure_node_workingset_information
+```
+
+This will run the benchmark, generate the performance impact report and dump the stats to the file specified in the --output command line flag.
+
+Note: We assume that you already have [phoronix-test-suite](http://www.phoronix-test-suite.com/) installed. We also assume that the terminal from which you're running the command already runs in a cgroup (This assumption might be removed in the future).
+
 ### Timed Linux Kernel compilation
 
 The policy used for this benchmark is to simply swap (swapfile stored in an SSD) out all bytes that are colder than 10s at a 40s period.
