@@ -16,11 +16,28 @@ The policy used for this benchmark is to simply reclaim all bytes that are colde
 
 - Memory savings
 ```
-peak memory usage (with our policy): 
-peak memory usage (control): 
+peak memory usage (with WMO): 4982.61328 MiB
+peak memory usage (control): 9569.1367 MiB
+peak memory reduction: 47.9%
 ```
 
 - Performance impact report ([full pdf](./benchmarks/linux-kernel/kenrelbench_report.pdf))
 
 ![Figure-0](./benchmarks/linux-kernel/screenshot-0.png)
+
+
+### Redis
+
+The policy used for this benchmark is to simply reclaim all bytes that are colder than 10s at a 40s period.
+
+- Memory savings
+```
+peak memory usage (with WMO): 375.9023 MiB
+peak memory usage (control): 509.765 MiB 
+peak memory reduction: 26%
+```
+
+- Performance impact report ([full_pdf](./benchmarks/redis/redisbench_report.pdf))
+
+![Figure-1](./benchmarks/redis/screenshot-0.png)
 
