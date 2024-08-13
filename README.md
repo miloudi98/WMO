@@ -13,7 +13,7 @@ The performance impact report is provided by the [phoronix-test-suite](http://ww
 ### Reproducing the benchmark results
 
 Benchmarks are executed using the [monitoring.py](./runtime/monitoring.py) script which is a simple wrapper around the phoronix-test-suite CLI. As the name suggests, this script simply starts the benchmark and collects stats.
-Run the following command to reproduce the linux kernel compilation benchmark.
+Run the following commands to reproduce the linux kernel compilation benchmark.
 ```
 sudo ./runtime/monitoring.py 'phoronix-test-suite benchmark build-linux-kernel' \
      --output=./stats.csv \
@@ -24,7 +24,13 @@ sudo ./runtime/monitoring.py 'phoronix-test-suite benchmark build-linux-kernel' 
      --configure_node_workingset_information
 ```
 
-This will run the benchmark, generate the performance impact report and dump the stats to the file specified in the --output command line flag.
+This will run the benchmark, generate a performance report and dump the stats to the file specified in the --output command line flag.
+
+To optimize the memory usage of the workload running (in the previous command). Run in a separate terminal the following command:
+```
+sudo ./runtime/agent.py $CGROUP_PATH --cold_age_threshold_ms=10000 --reclaim_freq_seconds=40
+```
+This will use the WSS information provided by MGLRU to try and optimize the memory usage (i.e. swap out cold memory to a lower tier storage backend -- SSD in our case).
 
 Note: We assume that you already have [phoronix-test-suite](http://www.phoronix-test-suite.com/) installed. We also assume that the terminal from which you're running the command already runs in a cgroup (This assumption might be removed in the future).
 
