@@ -21,7 +21,7 @@ peak memory usage (control): 9569.1367 MiB
 peak memory reduction: 47.9%
 ```
 
-- Performance impact report ([full pdf](./benchmarks/linux-kernel/kenrelbench_report.pdf))
+- Performance impact report ([full pdf](./benchmarks/linux-kernel/kernelbench_report.pdf))
 
 ![Figure-0](./benchmarks/linux-kernel/screenshot-0.png)
 
