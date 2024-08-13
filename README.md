@@ -7,12 +7,12 @@ little to no performance impact on workloads.
 ## Benchmarks
 
 The benchmarks below are from [openbenchmarking.org](https://openbenchmarking.org/) and were executed using [phoronix-test-suite](http://www.phoronix-test-suite.com/) CLI.
-For each benchmark, we will show the amount of memory savings we were able to get as well as report describing the performance impact of our memory reclaim policy.
+For each benchmark, we will show the amount of memory savings we were able to get as well as a report describing the performance impact of our memory optimization policy.
 The performance impact report is provided by the [phoronix-test-suite](http://www.phoronix-test-suite.com/) CLI. We will show a few screenshots here in this document, but all reports can be found in the benchmarks/$BENCHMARK/ directory.
 
 ### Timed Linux Kernel compilation
 
-The policy used for this benchmark is to simply reclaim all bytes that are colder than 10s at a 40s period.
+The policy used for this benchmark is to simply swap (swapfile stored in an SSD) out all bytes that are colder than 10s at a 40s period.
 
 - Memory savings
 ```
@@ -28,7 +28,7 @@ peak memory reduction: 47.9%
 
 ### Redis
 
-The policy used for this benchmark is to simply reclaim all bytes that are colder than 10s at a 40s period.
+The policy used for this benchmark is to simply swap (swapfile stored in an SSD) out all bytes that are colder than 10s at a 40s period.
 
 - Memory savings
 ```
